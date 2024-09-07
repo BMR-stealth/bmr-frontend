@@ -1,6 +1,9 @@
-// src/components/Signup.tsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';  // Import GoogleAuthProvider
+import { auth } from '../firebase';
+import { getFirestore, setDoc, doc } from 'firebase/firestore';  // Firestore methods
+import { app } from '../firebase';  // Firebase app instance
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -22,9 +25,9 @@ const Signup: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { name, email, password, confirmPassword } = formData;
+    const { name, email, password, confirmPassword, company, experience } = formData;
 
     // Basic validation
     if (!name || !email || !password || !confirmPassword) {
@@ -39,9 +42,50 @@ const Signup: React.FC = () => {
 
     setError('');
 
-    // Simulate successful signup
-    alert('Signup successful!');
-    navigate('/login');
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      await updateProfile(userCredential.user, { displayName: name });
+
+      const db = getFirestore(app);
+      await setDoc(doc(db, 'users', userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        name: name,
+        email: email,
+        company: company,
+        experience: experience,
+        createdAt: new Date(),
+      });
+
+      alert('Signup successful!');
+      navigate('/login');
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
+  // Handle Google Sign-In
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const db = getFirestore(app);
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        company: 'Google Account',
+        experience: 'N/A',
+        createdAt: new Date(),
+      });
+
+      alert('Google Sign-In successful!');
+      navigate('/dashboard');
+    } catch (error: any) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -165,6 +209,18 @@ const Signup: React.FC = () => {
               Log In
             </Link>
           </p>
+        </div>
+
+        {/* Google Sign-In Button */}
+        <div className="mt-4 text-center">
+          <p className="mb-2">Or sign up with:</p>
+          <button
+            onClick={handleGoogleSignIn}
+            className="flex items-center justify-center w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-200"
+          >
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon" className="w-5 h-5 mr-2" />
+            Sign in with Google
+          </button>
         </div>
       </div>
     </div>
