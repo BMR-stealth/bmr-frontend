@@ -1,6 +1,9 @@
-// src/components/Login.tsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'; // Import GoogleAuthProvider
+import { auth } from '../firebase';  // Firebase auth instance
+import { getFirestore, setDoc, doc } from 'firebase/firestore';  // Firestore methods
+import { app } from '../firebase';  // Firebase app instance
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -21,6 +24,30 @@ const Login: React.FC = () => {
       navigate('/dashboard');
     } else {
       setError('Invalid email or password');
+    }
+  };
+
+  // Handle Google Sign-In
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const db = getFirestore(app);
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        company: 'Google Account',
+        experience: 'N/A',
+        createdAt: new Date(),
+      });
+
+      alert('Google Sign-In successful!');
+      navigate('/dashboard');
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
@@ -80,6 +107,18 @@ const Login: React.FC = () => {
               Sign Up
             </Link>
           </p>
+        </div>
+
+        {/* Google Sign-In Button */}
+        <div className="mt-4 text-center">
+          <p className="mb-2">Or sign in with:</p>
+          <button
+            onClick={handleGoogleSignIn}
+            className="flex items-center justify-center w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-200"
+          >
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon" className="w-5 h-5 mr-2" />
+            Sign in with Google
+          </button>
         </div>
       </div>
     </div>
