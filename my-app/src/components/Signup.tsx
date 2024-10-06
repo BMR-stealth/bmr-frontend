@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';  // Import GoogleAuthProvider
 import { auth } from '../firebase';
-import { getFirestore, setDoc, doc } from 'firebase/firestore';  // Firestore methods
+import { getFirestore, setDoc, doc, getDoc } from 'firebase/firestore';  // Firestore methods
 import { app } from '../firebase';  // Firebase app instance
 
 const Signup: React.FC = () => {
@@ -55,38 +55,50 @@ const Signup: React.FC = () => {
         company: company,
         experience: experience,
         createdAt: new Date(),
+        userType: 'lender', // specifying user type
       });
-
+      
       alert('Signup successful!');
       navigate('/login');
     } catch (error: any) {
       setError(error.message);
     }
   };
+  
+ // Handle Google Sign-In (reusable in both Login.tsx and Signup.tsx)
+const handleGoogleSignIn = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
 
-  // Handle Google Sign-In
-  const handleGoogleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+    const db = getFirestore(app);
+    const userRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userRef);
 
-      const db = getFirestore(app);
-      await setDoc(doc(db, 'users', user.uid), {
+    if (!userDoc.exists()) {
+      // If the user doesn't exist in Firestore, create a new document
+      await setDoc(userRef, {
         uid: user.uid,
         name: user.displayName,
         email: user.email,
         company: 'Google Account',
         experience: 'N/A',
         createdAt: new Date(),
+        userType: 'lender', // Default user type for Google sign-in
       });
-
-      alert('Google Sign-In successful!');
-      navigate('/dashboard');
-    } catch (error: any) {
-      setError(error.message);
+      alert('Google Sign-Up successful! Redirecting to your dashboard...');
+    } else {
+      alert('Google Sign-In successful! Redirecting to your dashboard...');
     }
-  };
+
+    // Navigate to the dashboard after successful sign-in
+    navigate('/dashboard');
+  } catch (error: any) {
+    setError(error.message);
+  }
+};
+
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">

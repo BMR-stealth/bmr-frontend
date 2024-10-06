@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'; // Import GoogleAuthProvider
+import { GoogleAuthProvider, signInWithPopup, getRedirectResult, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';  // Firebase auth instance
-import { getFirestore, setDoc, doc } from 'firebase/firestore';  // Firestore methods
+import { getFirestore, setDoc, doc, getDoc } from 'firebase/firestore';  // Firestore methods
 import { app } from '../firebase';  // Firebase app instance
 
 const Login: React.FC = () => {
@@ -11,7 +11,40 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    // Check if there is a redirect result after Google sign-in
+    const fetchRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const user = result.user;
+
+          // Add user details to Firestore if not already added
+          const db = getFirestore(app);
+          await setDoc(doc(db, 'users', user.uid), {
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            company: 'Google Account',
+            experience: 'N/A',
+            createdAt: new Date(),
+          }, { merge: true });
+
+          alert('Google Sign-In successful!');
+          navigate('/dashboard');
+        }
+      } catch (error: any) {
+        if (error.message) {
+          setError(error.message);
+        }
+      }
+    };
+
+    fetchRedirectResult();
+  }, [navigate]);
+
+  // Handle Email/Password Login
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -19,15 +52,35 @@ const Login: React.FC = () => {
       return;
     }
 
-    // Simulate successful login
-    if (email === 'test@example.com' && password === 'password') {
-      navigate('/dashboard');
-    } else {
+    try {
+      // Authenticate with email and password
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Fetch Firestore user data if needed
+      const db = getFirestore(app);
+      const userRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        const userType = userDoc.data().userType;
+
+        // Redirect based on user type
+        if (userType === 'lender') {
+          navigate('/dashboard'); // Redirect lenders to their dashboard
+        } else {
+          navigate('/borrower'); // Redirect borrowers to their page
+        }
+      } else {
+        setError('User data not found.');
+      }
+    } catch (error: any) {
       setError('Invalid email or password');
     }
   };
 
-  // Handle Google Sign-In
+  // Handle Google Sign-In using redirect
+  // Handle Google Sign-In (combined for both existing and new users)
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
@@ -35,21 +88,32 @@ const Login: React.FC = () => {
       const user = result.user;
 
       const db = getFirestore(app);
-      await setDoc(doc(db, 'users', user.uid), {
-        uid: user.uid,
-        name: user.displayName,
-        email: user.email,
-        company: 'Google Account',
-        experience: 'N/A',
-        createdAt: new Date(),
-      });
+      const userRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userRef);
 
-      alert('Google Sign-In successful!');
+      if (!userDoc.exists()) {
+        // If the user doesn't exist in Firestore, create a new document
+        await setDoc(userRef, {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          company: 'Google Account',
+          experience: 'N/A',
+          createdAt: new Date(),
+          userType: 'lender', // Default user type for Google sign-in
+        });
+        alert('Google Sign-Up successful! Redirecting to your dashboard...');
+      } else {
+        alert('Google Sign-In successful! Redirecting to your dashboard...');
+      }
+
+      // Navigate to the dashboard after successful sign-in
       navigate('/dashboard');
     } catch (error: any) {
       setError(error.message);
     }
   };
+
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -62,6 +126,7 @@ const Login: React.FC = () => {
           </div>
         )}
 
+        {/* Email/Password Sign-In Form */}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
