@@ -1,0 +1,99 @@
+/*!***************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!./app/auth/auth.css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************/
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    width: 100%;
+    min-height: 100vh; /* Ensure it covers the full viewport height */
+    background-color: #d1d5db20;
+}
+
+.sideheadercontent {
+  background-color: #18181b; /* bg-zinc-900 */
+  width: 50%;
+  padding: 2rem; /* p-8 */
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+@media (min-width: 1024px) {
+  .sideheadercontent {
+    overflow-y: hidden; /* Prevent horizontal overflow */
+    height: 100vh;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sideheadercontent {
+    width: 20%;
+  }
+}
+@media (max-width: 768px) {
+  .body{
+    overflow-y: auto;
+  }
+  .container{
+    flex-direction: column;
+  }
+  .sideheadercontent{
+    width: 100%;
+  }
+  .auth-tabs{
+    padding: 0;
+    width: 100%;
+  }
+  
+}
+
+@media (min-width: 768px) {
+  .login-link {
+    right: 2rem;
+    top: 2rem;
+  }
+}
+
+.welcome-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.copyright {
+  font-size: 0.875rem;
+  color: #d1d5db; /* text-slate-300 */
+}
+
+.auth-tabs{
+  width: fill-available;
+  overflow-y: auto;
+  height: 100vh;
+  padding: 2rem;
+  display: flex;
+  justify-content: start;
+  align-items: top;
+  padding-top: 2rem;
+}
+

@@ -1,0 +1,20 @@
+.navLink {
+    font-family: 'Instrument Sans', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 150%;
+    text-decoration: none;
+  }
+
+  .navLink:hover {
+    text-decoration: underline;
+  }
+
+  .active {
+    color: var(--Headings, #09090B);
+    font-weight: 500;
+  }
+
+  .inactive {
+    color: var(--Secondary-Text, #71717A);
+    font-weight: 500;
+  }

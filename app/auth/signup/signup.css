@@ -1,0 +1,140 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    width: 100%;
+}
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #d1d5db20;
+}
+
+.sideheadercontent {
+  background-color: #18181b; /* bg-zinc-900 */
+  width: 50%;
+  padding: 2rem; /* p-8 */
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+@media (min-width: 1024px) {
+  .sideheadercontent {
+    margin-right: 2rem; /* lg:mr-8 */
+  }
+}
+
+.login-link {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .login-link {
+    right: 2rem;
+    top: 2rem;
+  }
+}
+
+.welcome-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.copyright {
+  font-size: 0.875rem;
+  color: #d1d5db; /* text-slate-300 */
+}
+
+.signup {
+  float: right;
+  overflow-y: auto;
+  width: auto;
+  border-left: 1px solid black;
+}
+
+@media (min-width: 1024px) {
+  .signup {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.signup-content {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: start;
+  gap: 1.5rem;
+}
+
+
+
+@media (min-width: 640px) {
+  .signup-content {
+    width: 350px;
+  }
+}
+
+.signup-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.signup-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.signup-subtitle {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.terms {
+  padding: 0 2rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.link {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.link:hover {
+  color: var(--primary);
+}
+
+.login-prompt {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-top: 1rem;
+}
+
