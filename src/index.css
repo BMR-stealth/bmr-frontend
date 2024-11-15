@@ -1,0 +1,232 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border transition-[background-color,border-color] duration-150 ease-in-out;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  .section-bg {
+    @apply bg-secondary/30 rounded-lg;
+  }
+
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 98%;
+    
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 142 72% 29%;
+    --success-foreground: 0 0% 98%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 48 96% 98%;
+
+    --info: 221 83% 53%;
+    --info-foreground: 0 0% 98%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+
+    --radius: 0.75rem;
+
+    /* Chart Colors */
+    --chart-1: 221 83% 53%;
+    --chart-2: 240 5.9% 10%;
+    --chart-3: 221 83% 65%;
+    --chart-4: 240 5.9% 30%;
+    --chart-5: 221 83% 45%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 240 5.9% 10%;
+    
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 142 72% 29%;
+    --success-foreground: 0 0% 98%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 48 96% 98%;
+
+    --info: 217.2 91.2% 59.8%;
+    --info-foreground: 240 5.9% 10%;
+    
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    /* Chart Colors - Dark Mode */
+    --chart-1: 217.2 91.2% 59.8%;
+    --chart-2: 0 0% 98%;
+    --chart-3: 217.2 91.2% 70%;
+    --chart-4: 240 5% 64.9%;
+    --chart-5: 217.2 91.2% 50%;
+  }
+}
+
+/* New gradient animation for the secure button */
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 4s ease infinite;
+  background-image: linear-gradient(
+    45deg,
+    hsl(var(--success)) 0%,
+    hsl(142 76% 36%) 50%,
+    hsl(var(--success)) 100%
+  );
+}
+
+/* New pulse animation for the secure button */
+.animate-secure-pulse {
+  animation: secure-pulse 2s infinite;
+}
+
+/* High value badge animations */
+.animate-high-value {
+  background-size: 200% auto;
+  animation: shine 3s linear infinite;
+  background-image: linear-gradient(
+    110deg,
+    hsl(38 92% 50%) 0%,
+    hsl(38 92% 60%) 25%,
+    hsl(38 92% 70%) 50%,
+    hsl(38 92% 60%) 75%,
+    hsl(38 92% 50%) 100%
+  );
+}
+
+.animate-high-value-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.animate-star-spin {
+  animation: star-spin 4s linear infinite;
+  transform-origin: center;
+}
+
+/* New competitive bid button animations */
+.animate-bid-gradient {
+  background-size: 200% 200%;
+  animation: gradient 4s ease infinite;
+  background-image: linear-gradient(
+    45deg,
+    hsl(221 83% 53%) 0%,
+    hsl(217 91% 60%) 50%,
+    hsl(221 83% 53%) 100%
+  );
+}
+
+.animate-bid-pulse {
+  animation: bid-pulse 2s infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes secure-pulse {
+  0% {
+    box-shadow: 0 0 0 0 hsla(var(--success) / 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px hsla(var(--success) / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 hsla(var(--success) / 0);
+  }
+}
+
+@keyframes bid-pulse {
+  0% {
+    box-shadow: 0 0 0 0 hsla(var(--primary) / 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px hsla(var(--primary) / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 hsla(var(--primary) / 0);
+  }
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 10px hsla(38 92% 50% / 0.5),
+                0 0 20px hsla(38 92% 50% / 0.3),
+                0 0 30px hsla(38 92% 50% / 0.2);
+  }
+  to {
+    box-shadow: 0 0 20px hsla(38 92% 50% / 0.6),
+                0 0 40px hsla(38 92% 50% / 0.4),
+                0 0 60px hsla(38 92% 50% / 0.3);
+  }
+}
+
+@keyframes star-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

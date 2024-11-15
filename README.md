@@ -1,150 +1,218 @@
-# My Next.js App
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Table of Contents
-
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Running the Development Server](#running-the-development-server)
-- [Project Structure](#project-structure)
-- [Features](#features)
-- [Learn More](#learn-more)
-- [Deploy on Vercel](#deploy-on-vercel)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Getting Started
 
-### Prerequisites
+Follow these instructions to set up and run the project from scratch, even if you do not have Node.js or other dependencies installed.
 
-Before you begin, ensure you have met the following requirements:
+---
 
-- **Node.js**: Install [Node.js](https://nodejs.org/) version 14 or higher.
-- **Package Manager**: Use one of the following package managers:
-  - [npm](https://www.npmjs.com/)
-  - [Yarn](https://yarnpkg.com/)
-  - [pnpm](https://pnpm.io/)
-  - [Bun](https://bun.sh/)
+## Prerequisites
 
-### Installation
+Ensure the following are installed on your system:
 
-1. **Clone the repository:**
+- [Git](https://git-scm.com/downloads)
+- [Python](https://www.python.org/downloads/) (version 3.8 or higher)
+- [Node.js](https://nodejs.org/) (included in instructions)
+- [Docker](https://www.docker.com/) (optional, for containerized deployment)
+
+---
+
+## Step 1: Clone the Repository
+
+1. Open a terminal.
+2. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone <repository-url>
+   cd <repository-folder>
    ```
 
-2. **Install dependencies:**
+---
 
-   Using **npm**:
+## Step 2: Install Node.js and npm
+
+1. Download the Node.js installer from the [official site](https://nodejs.org/).
+2. Install Node.js by following the setup instructions.
+3. Verify installation:
+
+   ```bash
+   node -v
+   npm -v
+   ```
+
+If you already have Node.js installed, ensure it is version 16 or higher.
+
+---
+
+## Step 3: Install Dependencies
+
+Run the following commands to install the necessary dependencies for both frontend and backend:
+
+### Backend (Python/Django)
+
+1. Set up a Python virtual environment:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate # On Windows: venv\Scripts\activate
+   ```
+
+2. Install backend dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Frontend (React/TypeScript)
+
+1. Navigate to the `src` folder:
+
+   ```bash
+   cd src
+   ```
+
+2. Install frontend dependencies:
 
    ```bash
    npm install
    ```
 
-   Using **Yarn**:
+---
+
+## Step 4: Configure Environment Variables
+
+1. Create `.env` files in the project root and `src` directories.
+2. Populate them with the required variables (example format provided in `.env.example`).
+
+---
+
+## Step 5: Database Setup
+
+1. Run migrations for the backend database:
 
    ```bash
-   yarn install
+   python manage.py makemigrations
+   python manage.py migrate
    ```
 
-   Using **pnpm**:
+2. Start the development server:
 
    ```bash
-   pnpm install
+   python manage.py runserver
    ```
 
-   Using **Bun**:
+---
+
+## Step 6: Start the Frontend Server
+
+1. Navigate to the `src` directory (if not already there):
 
    ```bash
-   bun install
+   cd src
    ```
 
-### Running the Development Server
+2. Start the development server:
 
-Start the development server with your preferred package manager:
+   ```bash
+   npm run dev
+   ```
 
-Using **npm**:
+---
+
+## Optional: Run with Docker
+
+1. Ensure Docker is installed and running.
+2. Build and run the Docker containers:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+---
+
+## Access the Platform
+
+Once the servers are running:
+
+- Frontend: [http://localhost:5173](http://localhost:5173)
+- Backend API: [http://localhost:8000](http://localhost:8000)
+
+---
+
+## Testing
+
+### Backend Tests
+
+Run backend tests using:
 
 ```bash
-npm run dev
+python manage.py test
 ```
 
-Using **Yarn**:
+### Frontend Tests
+
+Run frontend tests using:
 
 ```bash
-yarn dev
+npm run test
 ```
 
-Using **pnpm**:
+---
 
-```bash
-pnpm dev
+## Deployment
+
+For production deployment:
+
+1. Set the `DJANGO_SETTINGS_MODULE` to `config.settings.production`.
+2. Build the frontend:
+
+   ```bash
+   npm run build
+   ```
+
+3. Collect static files for the backend:
+
+   ```bash
+   python manage.py collectstatic
+   ```
+
+4. Use Docker or a WSGI server like Gunicorn for backend hosting.
+
+---
+
+## Troubleshooting
+
+- Ensure all environment variables are correctly configured.
+- Clear caches if dependencies fail to install:
+
+  ```bash
+  npm cache clean --force
+  ```
+
+  or
+
+  ```bash
+  pip cache purge
+  ```
+
+- Use `docker-compose logs` to check Docker-related issues.
+
+---
+
+## Contributing
+
+1. Fork the repository.
+2. Create a new branch for your feature/bugfix:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. Push your changes and create a pull request.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
 ```
 
-Using **Bun**:
-
-```bash
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Project Structure
-
-Here's an overview of the project's directory structure:
-
-```
-my-app/
-├── app/
-│   ├── auth/
-│   │   ├── login/
-│   │   └── signup/
-│   ├── components/
-│   ├── data/
-│   ├── dashboard/
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── ui/
-│   ├── icons.tsx
-│   └── ...
-├── public/
-├── styles/
-├── .gitignore
-├── package.json
-├── tsconfig.json
-├── tailwind.config.ts
-├── postcss.config.mjs
-└── README.md
-```
-
-## Features
-
-- **Responsive Design**: Built with Tailwind CSS for seamless responsiveness across devices.
-- **Authentication**: User authentication handled with Firebase.
-- **State Management**: Managed using React Hook Form and Radix UI components.
-- **Data Handling**: Efficient data fetching and state management with React Table.
-- **Custom Components**: Reusable UI components for scalability.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can also check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This README assumes minimal technical familiarity and provides detailed instructions for running the project locally or via Docker.
